@@ -1,0 +1,85 @@
+
+-- create
+
+
+create table address(
+plz integer primary key,
+city varchar(255) not null
+);
+
+CREATE TABLE EMPLOYEE (
+  empId INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  dept TEXT NOT NULL,
+  plz integer not null,
+  foreign key(plz) references address(plz)
+);
+
+
+
+-- insert
+insert into address(plz,city) values (5202,"Neumarkt am Wallersee");
+insert into address(plz,city) values (5020,"Salzburg");
+
+
+INSERT INTO EMPLOYEE(empId,name,dept,plz) VALUES (0001, 'Clark', 'Sales',5202);
+INSERT INTO EMPLOYEE(empId,name,dept,plz) VALUES (0002, 'Cheff', 'Sales',5202);
+INSERT INTO EMPLOYEE(empId,name,dept,plz) VALUES (0003, 'Sarling', 'Sales',5020);
+INSERT INTO EMPLOYEE(empId,name,dept,plz) VALUES (0004, 'wdwda', 'wdwdwd',5020);
+INSERT INTO EMPLOYEE(empId,name,dept,plz) VALUES (0005, 'wdwda', 'wdwdwd',5020);
+
+
+select 
+count(city) as "Number named: ",
+city
+from
+EMPLOYEE as e
+left join 
+address as a
+on
+e.plz = a.plz
+group by 
+a.city
+order by
+count(city) asc 
+limit 1
+;
+
+select
+empId,
+name,
+city
+from EMPLOYEE as e
+left join
+address as a
+on 
+e.plz = a.plz
+where empId = (select max(empId) from EMPLOYEE);
+
+SELECT
+  dept,
+  COUNT(empId) AS employee_count
+FROM
+  EMPLOYEE
+GROUP BY
+  dept
+HAVING
+  COUNT(empId) > 2;
+  
+  SELECT
+  e.dept,
+  a.city,
+  COUNT(e.empId) AS employee_count
+FROM
+  EMPLOYEE AS e
+LEFT JOIN
+  address AS a
+ON
+  e.plz = a.plz
+GROUP BY
+  e.dept, a.city
+HAVING
+  COUNT(e.empId) > 1;
+
+
+https://onecompiler.com/mysql/42jjxev7f
