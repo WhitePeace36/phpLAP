@@ -221,7 +221,7 @@
         <button type="submit">Search</button>
         <br>
         <?php
-        if (isset($_POST["search"]) && $_POST["search"] !== "") {
+        if (isset($_POST['tables']) && $_POST['tables'] !== '' && isset($_POST["search"]) && $_POST["search"] !== "") {
             
             $selecteddb = $_POST['databases'];
 
@@ -231,12 +231,13 @@
                 die("Connection failed: " . $conn->connect_error);
             }
 
-            $stmt = $conn->prepare("select " . $_POST["headers"] . " from " . $_POST["tables"] . " where " . $_POST["headers"] = " ? ;");
+            $stmt = $conn->prepare("select * from " . $_POST["tables"] . " where " . $_POST["headers"] = " ? ;");
             $stmt->bind_param("s", $_POST["search"]);
 
             $stmt->execute();
             $result = $stmt->get_result();
 
+            $data = null;
             while ($row = $result->fetch_assoc()) {
                 //  echo "id: " . $userId. ", Name: " . $Name. ", Nachname: " . $nachname. ", email: " . $email. "<br>";
                 //$data[] = array($userId, $Name, $nachname, $email);
@@ -246,14 +247,18 @@
             // foreach ($data as $row) {
             //     echo "<p>$row</p> <br>;";
             // }
-
-            echo "<p>";
-            foreach ($data as $row) {
-                foreach ($row as $key => $value) {
-                    echo "$value <br>" ;
+            if($data != NULL){
+                echo "<p>";
+                foreach ($data as $row) {
+                    foreach ($row as $key => $value) {
+                        echo "$value <br>" ;
+                    }
                 }
+                echo "</p><br>";
+            }else{
+                echo "not found";
             }
-            echo "</p><br>";
+
             $conn->close();
         }
         ?>
